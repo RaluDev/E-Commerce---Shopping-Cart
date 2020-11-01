@@ -63,11 +63,39 @@ class UI {
         });
         productsDOM.innerHTML = result;
     }
+    //add products in the bag
+    getBagButtons() {
+        //spread operator turns node list into array!
+        const buttons = [...document.querySelectorAll('.bag-btn')];
+        // console.log(buttons);
+        buttons.forEach(button => {
+            let id = button.dataset.id;
+            let inCart = cart.find(item => item.id === id);
+            if (inCart) {
+                button.innerText = "In Cart";
+                button.disabled = true
+            }
+            else {
+                button.addEventListener('click', (event) => {
+                    event.target.innerHTML = "In Cart";
+                    event.target.disabled = true;
+                    //get products from products
+                    //add product to cart
+                    //save cart in local storage
+                    //set cart values
+                    //display cart item
+                    //show the cart
+                });
+            }
+        });
+    }
 }
 
 // local storage
 class Storage {
-
+    static saveProducts(products) {
+        localStorage.setItem('products', JSON.stringify(products));
+    }
 }
 
 
@@ -76,9 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const products = new Products();
 
     //get all products
-    products.getProducts().then(products =>
-        ui.displayProducts(products));
-
+    products.getProducts().then(products => {
+        ui.displayProducts(products)
+        Storage.saveProducts(products);
+    }).then(() => {
+        ui.getBagButtons();
+    });
 });
 
-// am ramas la 1.47
+//am ramas la 2:12
